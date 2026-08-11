@@ -10,6 +10,8 @@ export const dictionary = {
     langEn: 'EN',
     langEs: 'ES',
     madeWith: 'Made with ❤️ by',
+    courseCredit: 'Strategic Marketing, MBA at',
+    university: 'Universidad del CEMA',
     sections: {
       definitions: 'Definitions',
       product: 'Product',
@@ -113,6 +115,8 @@ export const dictionary = {
     langEn: 'EN',
     langEs: 'ES',
     madeWith: 'Hecho con ❤️ por',
+    courseCredit: 'Marketing Estratégico, MBA en',
+    university: 'Universidad del CEMA',
     sections: {
       definitions: 'Definiciones',
       product: 'Producto',

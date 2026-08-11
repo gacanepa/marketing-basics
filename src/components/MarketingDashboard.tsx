@@ -154,6 +154,15 @@ export const MarketingDashboard = () => {
           >
             Gabriel Cánepa
           </a>
+          {' · '}
+          {t.courseCredit}{' '}
+          <a
+            href="https://ucema.edu.ar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t.university}
+          </a>
         </p>
       </footer>
     </div>
