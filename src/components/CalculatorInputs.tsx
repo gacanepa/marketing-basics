@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 import type { CalculatorState } from '../hooks/useMarketingCalculator';
 import type { ScenarioMetrics } from '../utilities/marketingMath';
+import { NumberField } from './NumberField';
 
 interface CalculatorInputsProps {
   t: Dictionary;
@@ -32,42 +33,38 @@ export const CalculatorInputs = ({
         <div className="field-grid">
           <div className="field">
             <label htmlFor="fixedCosts">{t.labels.fixed}</label>
-            <input
+            <NumberField
               id="fixedCosts"
-              type="number"
-              min={0}
               value={state.fixedCosts}
-              onChange={(e) => onUpdate('fixedCosts', Number(e.target.value))}
+              step="any"
+              onChange={(value) => onUpdate('fixedCosts', value)}
             />
           </div>
           <div className="field">
             <label htmlFor="variableCost">{t.labels.var}</label>
-            <input
+            <NumberField
               id="variableCost"
-              type="number"
-              min={0}
               value={state.variableCost}
-              onChange={(e) => onUpdate('variableCost', Number(e.target.value))}
+              step="any"
+              onChange={(value) => onUpdate('variableCost', value)}
             />
           </div>
           <div className="field">
             <label htmlFor="sellingPrice">{t.labels.price}</label>
-            <input
+            <NumberField
               id="sellingPrice"
-              type="number"
-              min={0}
               value={state.sellingPrice}
-              onChange={(e) => onUpdate('sellingPrice', Number(e.target.value))}
+              step="any"
+              onChange={(value) => onUpdate('sellingPrice', value)}
             />
           </div>
           <div className="field">
             <label htmlFor="marketSize">{t.labels.marketSize}</label>
-            <input
+            <NumberField
               id="marketSize"
-              type="number"
-              min={0}
               value={state.marketSize}
-              onChange={(e) => onUpdate('marketSize', Number(e.target.value))}
+              step={1}
+              onChange={(value) => onUpdate('marketSize', value)}
             />
           </div>
         </div>

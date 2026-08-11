@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import type { Dictionary } from '../i18n';
 import type { Product } from '../types/product';
+import { NumberField } from './NumberField';
 
 interface ProductManagerProps {
   t: Dictionary;
@@ -103,42 +104,38 @@ export const ProductManager = ({
             </div>
             <div className="field">
               <label htmlFor="new-fixed">{t.labels.fixed}</label>
-              <input
+              <NumberField
                 id="new-fixed"
-                type="number"
-                min={0}
                 value={fixedCosts}
-                onChange={(e) => setFixedCosts(Number(e.target.value))}
+                step="any"
+                onChange={setFixedCosts}
               />
             </div>
             <div className="field">
               <label htmlFor="new-var">{t.labels.var}</label>
-              <input
+              <NumberField
                 id="new-var"
-                type="number"
-                min={0}
                 value={variableCost}
-                onChange={(e) => setVariableCost(Number(e.target.value))}
+                step="any"
+                onChange={setVariableCost}
               />
             </div>
             <div className="field">
               <label htmlFor="new-price">{t.labels.price}</label>
-              <input
+              <NumberField
                 id="new-price"
-                type="number"
-                min={0}
                 value={sellingPrice}
-                onChange={(e) => setSellingPrice(Number(e.target.value))}
+                step="any"
+                onChange={setSellingPrice}
               />
             </div>
             <div className="field">
               <label htmlFor="new-market">{t.labels.marketSize}</label>
-              <input
+              <NumberField
                 id="new-market"
-                type="number"
-                min={0}
                 value={marketSize}
-                onChange={(e) => setMarketSize(Number(e.target.value))}
+                step={1}
+                onChange={setMarketSize}
               />
             </div>
             <div className="actions-row full">

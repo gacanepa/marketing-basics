@@ -19,7 +19,7 @@ interface CompareRow {
   label: string;
   baseline: number;
   current: number;
-  format: 'currency' | 'percent' | 'number';
+  format: 'currencyUnit' | 'currencyTotal' | 'percent' | 'number';
   higherIsBetter?: boolean;
 }
 
@@ -28,6 +28,19 @@ const inputsMatch = (a: CalculatorState, b: CalculatorState) =>
   a.variableCost === b.variableCost &&
   a.sellingPrice === b.sellingPrice &&
   a.marketSize === b.marketSize;
+
+const UNIT_MONEY: Intl.NumberFormatOptions = {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 3,
+};
+
+const TOTAL_MONEY: Intl.NumberFormatOptions = {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+};
 
 export const ScenarioComparison = ({
   t,
@@ -59,7 +72,7 @@ export const ScenarioComparison = ({
         label: t.labels.unitMargin,
         baseline: baselineMetrics.unitMargin,
         current: currentMetrics.unitMargin,
-        format: 'currency',
+        format: 'currencyUnit',
         higherIsBetter: true,
       },
       {
@@ -99,7 +112,7 @@ export const ScenarioComparison = ({
         label: `${t.labels.profit} @ ${formatNumber(compareVolume)}`,
         baseline: baselineProfit,
         current: currentProfit,
-        format: 'currency',
+        format: 'currencyTotal',
         higherIsBetter: true,
       },
     ],
@@ -115,18 +128,17 @@ export const ScenarioComparison = ({
   );
 
   const formatValue = (value: number, format: CompareRow['format']) => {
-    if (format === 'currency') {
-      return formatNumber(value, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    if (format === 'currencyUnit') {
+      return formatNumber(value, UNIT_MONEY);
+    }
+    if (format === 'currencyTotal') {
+      return formatNumber(value, TOTAL_MONEY);
     }
     if (format === 'percent') {
       return `${formatNumber(value, { maximumFractionDigits: 2 })}%`;
     }
     return formatNumber(value);
   };
-
-  const formatMoney = (n: number) =>
-    formatNumber(n, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-
   const declinePct =
     allowableVolumeDecline != null && allowableVolumeDecline > 0
       ? formatNumber(allowableVolumeDecline, { maximumFractionDigits: 1 })
@@ -147,15 +159,15 @@ export const ScenarioComparison = ({
           <dl className="baseline-strip-grid">
             <div>
               <dt>{t.labels.fixed}</dt>
-              <dd>{formatMoney(baseline.fixedCosts)}</dd>
+              <dd>{formatNumber(baseline.fixedCosts, TOTAL_MONEY)}</dd>
             </div>
             <div>
               <dt>{t.labels.var}</dt>
-              <dd>{formatMoney(baseline.variableCost)}</dd>
+              <dd>{formatNumber(baseline.variableCost, UNIT_MONEY)}</dd>
             </div>
             <div>
               <dt>{t.labels.price}</dt>
-              <dd>{formatMoney(baseline.sellingPrice)}</dd>
+              <dd>{formatNumber(baseline.sellingPrice, UNIT_MONEY)}</dd>
             </div>
             <div>
               <dt>{t.labels.marketSize}</dt>
