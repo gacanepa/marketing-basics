@@ -127,11 +127,6 @@ export const ScenarioComparison = ({
   const formatMoney = (n: number) =>
     formatNumber(n, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
-  const maxAbs = Math.max(
-    ...rows.flatMap((r) => [Math.abs(r.baseline), Math.abs(r.current)]),
-    1,
-  );
-
   const declinePct =
     allowableVolumeDecline != null && allowableVolumeDecline > 0
       ? formatNumber(allowableVolumeDecline, { maximumFractionDigits: 1 })
@@ -226,30 +221,37 @@ export const ScenarioComparison = ({
               </tbody>
             </table>
 
-            <div className="bar-chart" aria-hidden="true">
-              {rows.slice(0, 4).map((row) => (
-                <div key={row.key} className="bar-row">
-                  <div className="bar-label">{row.label}</div>
-                  <div className="dual-bars">
-                    <div className="bar-track">
-                      <div
-                        className="bar-fill baseline"
-                        style={{ width: `${(Math.abs(row.baseline) / maxAbs) * 100}%` }}
-                      >
-                        {t.labels.baseline}
+            <div className="bar-chart">
+              {rows.slice(0, 4).map((row) => {
+                const rowMax = Math.max(Math.abs(row.baseline), Math.abs(row.current), 1);
+                const baselineTitle = `${t.labels.baseline}: ${formatValue(row.baseline, row.format)}`;
+                const currentTitle = `${t.labels.current}: ${formatValue(row.current, row.format)}`;
+                return (
+                  <div key={row.key} className="bar-row">
+                    <div className="bar-label">{row.label}</div>
+                    <div className="dual-bars">
+                      <div className="bar-track" title={baselineTitle}>
+                        <div
+                          className="bar-fill baseline"
+                          style={{ width: `${(Math.abs(row.baseline) / rowMax) * 100}%` }}
+                          title={baselineTitle}
+                        >
+                          {t.labels.baseline}
+                        </div>
                       </div>
-                    </div>
-                    <div className="bar-track">
-                      <div
-                        className="bar-fill current"
-                        style={{ width: `${(Math.abs(row.current) / maxAbs) * 100}%` }}
-                      >
-                        {t.labels.current}
+                      <div className="bar-track" title={currentTitle}>
+                        <div
+                          className="bar-fill current"
+                          style={{ width: `${(Math.abs(row.current) / rowMax) * 100}%` }}
+                          title={currentTitle}
+                        >
+                          {t.labels.current}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {declinePct ? (
