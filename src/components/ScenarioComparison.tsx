@@ -236,29 +236,29 @@ export const ScenarioComparison = ({
             <div className="bar-chart">
               {rows.slice(0, 4).map((row) => {
                 const rowMax = Math.max(Math.abs(row.baseline), Math.abs(row.current), 1);
-                const baselineTitle = `${t.labels.baseline}: ${formatValue(row.baseline, row.format)}`;
-                const currentTitle = `${t.labels.current}: ${formatValue(row.current, row.format)}`;
+                const baselineTip = `${t.labels.baseline}: ${formatValue(row.baseline, row.format)}`;
+                const currentTip = `${t.labels.current}: ${formatValue(row.current, row.format)}`;
                 return (
                   <div key={row.key} className="bar-row">
                     <div className="bar-label">{row.label}</div>
                     <div className="dual-bars">
-                      <div className="bar-track" title={baselineTitle}>
+                      <div className="bar-track">
                         <div
                           className="bar-fill baseline"
                           style={{ width: `${(Math.abs(row.baseline) / rowMax) * 100}%` }}
-                          title={baselineTitle}
                         >
                           {t.labels.baseline}
                         </div>
+                        <span className="bar-tooltip">{baselineTip}</span>
                       </div>
-                      <div className="bar-track" title={currentTitle}>
+                      <div className="bar-track">
                         <div
                           className="bar-fill current"
                           style={{ width: `${(Math.abs(row.current) / rowMax) * 100}%` }}
-                          title={currentTitle}
                         >
                           {t.labels.current}
                         </div>
+                        <span className="bar-tooltip">{currentTip}</span>
                       </div>
                     </div>
                   </div>
