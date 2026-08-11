@@ -24,6 +24,7 @@
   --chart-grid: rgba(26, 36, 33, 0.08);
   --input-bg: #fff;
   --focus: #0f6b4c;
+  --radius: 0.3rem;
   color-scheme: light;
 }
 
@@ -50,6 +51,7 @@
   --chart-grid: rgba(238, 243, 239, 0.08);
   --input-bg: #151c19;
   --focus: #5dcaa0;
+  --radius: 0.3rem;
   color-scheme: dark;
 }
 
@@ -139,7 +141,7 @@ button {
 .seg-control {
   display: inline-flex;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius);
   overflow: hidden;
   background: var(--surface);
   backdrop-filter: blur(8px);
@@ -198,7 +200,7 @@ button {
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius);
   padding: 1.25rem 1.35rem;
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
@@ -245,7 +247,7 @@ button {
   color: var(--accent);
   background: var(--accent-soft);
   padding: 0.45rem 0.65rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   width: fit-content;
 }
 
@@ -290,7 +292,7 @@ button {
   border: 1px solid var(--border);
   background: var(--input-bg);
   color: var(--text);
-  border-radius: 0.65rem;
+  border-radius: var(--radius);
   padding: 0.65rem 0.75rem;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -311,7 +313,7 @@ button {
 
 .metric {
   padding: 0.75rem 0.85rem;
-  border-radius: 0.75rem;
+  border-radius: var(--radius);
   background: var(--accent-soft);
 }
 
@@ -339,7 +341,7 @@ button {
   border: 1px solid var(--border);
   background: var(--surface-solid);
   color: var(--text);
-  border-radius: 999px;
+  border-radius: var(--radius);
   padding: 0.55rem 1rem;
   font-weight: 600;
   transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
@@ -444,15 +446,16 @@ button {
 .callout {
   margin-top: 1rem;
   padding: 0.9rem 1rem;
-  border-radius: 0.75rem;
+  border-radius: var(--radius);
   background: var(--accent-soft);
   color: var(--text);
+  border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
 }
 
 .callout.muted {
   background: transparent;
-  border-left-color: var(--border);
+  border-left-color: var(--text-muted);
   color: var(--text-muted);
 }
 
@@ -479,14 +482,14 @@ button {
   position: relative;
   height: 1.75rem;
   background: color-mix(in srgb, var(--border) 60%, transparent);
-  border-radius: 0.4rem;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
 .bar-fill {
   position: absolute;
   inset: 0 auto 0 0;
-  border-radius: 0.4rem;
+  border-radius: var(--radius);
   display: flex;
   align-items: center;
   padding: 0 0.5rem;
