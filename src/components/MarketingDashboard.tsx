@@ -143,6 +143,19 @@ export const MarketingDashboard = () => {
           formatNumber={formatNumber}
         />
       </main>
+
+      <footer className="app-footer">
+        <p>
+          {t.madeWith}{' '}
+          <a
+            href="https://www.linkedin.com/in/gacanepa/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Gabriel Cánepa
+          </a>
+        </p>
+      </footer>
     </div>
   );
 };

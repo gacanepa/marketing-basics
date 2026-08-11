@@ -9,6 +9,7 @@ export const dictionary = {
     themeDark: 'Dark',
     langEn: 'EN',
     langEs: 'ES',
+    madeWith: 'Made with ❤️ by',
     sections: {
       definitions: 'Definitions',
       product: 'Product',
@@ -111,6 +112,7 @@ export const dictionary = {
     themeDark: 'Oscuro',
     langEn: 'EN',
     langEs: 'ES',
+    madeWith: 'Hecho con ❤️ por',
     sections: {
       definitions: 'Definiciones',
       product: 'Producto',
