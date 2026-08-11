@@ -31,6 +31,7 @@ export const MarketingDashboard = () => {
 
   const {
     state,
+    baseline,
     baselineMetrics,
     current,
     breakEven,
@@ -45,6 +46,12 @@ export const MarketingDashboard = () => {
   useEffect(() => {
     loadProduct(toInputs(activeProduct));
   }, [activeId, activeProduct, loadProduct]);
+
+  const isUnchanged =
+    state.fixedCosts === baseline.fixedCosts &&
+    state.variableCost === baseline.variableCost &&
+    state.sellingPrice === baseline.sellingPrice &&
+    state.marketSize === baseline.marketSize;
 
   const formatNumber = useMemo(() => {
     const locale = lang === 'es-419' ? 'es-419' : 'en-US';
@@ -118,6 +125,7 @@ export const MarketingDashboard = () => {
             t={t}
             state={state}
             metrics={current}
+            isUnchanged={isUnchanged}
             onUpdate={updateField}
             onSetBaseline={setAsBaseline}
             onReset={() => loadProduct(toInputs(activeProduct))}
@@ -136,6 +144,8 @@ export const MarketingDashboard = () => {
         <ScenarioComparison
           key={activeId}
           t={t}
+          baseline={baseline}
+          current={state}
           baselineMetrics={baselineMetrics}
           currentMetrics={current}
           allowableVolumeDecline={allowableVolumeDecline}

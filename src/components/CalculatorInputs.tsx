@@ -6,6 +6,7 @@ interface CalculatorInputsProps {
   t: Dictionary;
   state: CalculatorState;
   metrics: ScenarioMetrics;
+  isUnchanged: boolean;
   onUpdate: (field: keyof CalculatorState, value: number) => void;
   onSetBaseline: () => void;
   onReset: () => void;
@@ -16,6 +17,7 @@ export const CalculatorInputs = ({
   t,
   state,
   metrics,
+  isUnchanged,
   onUpdate,
   onSetBaseline,
   onReset,
@@ -79,18 +81,20 @@ export const CalculatorInputs = ({
           </div>
           <div className="metric">
             <span className="label">{t.labels.marginPct}</span>
-            <span className="value">{formatNumber(metrics.marginPercent, { maximumFractionDigits: 1 })}%</span>
+            <span className="value">
+              {formatNumber(metrics.marginPercent, { maximumFractionDigits: 1 })}%
+            </span>
           </div>
           <div className="metric">
             <span className="label">{t.labels.markupPct}</span>
-            <span className="value">{formatNumber(metrics.markupPercent, { maximumFractionDigits: 1 })}%</span>
+            <span className="value">
+              {formatNumber(metrics.markupPercent, { maximumFractionDigits: 1 })}%
+            </span>
           </div>
           <div className="metric">
             <span className="label">{t.labels.bev}</span>
             <span className="value">
-              {metrics.unitMargin > 0
-                ? formatNumber(metrics.breakEven)
-                : '—'}
+              {metrics.unitMargin > 0 ? formatNumber(metrics.breakEven) : '—'}
             </span>
           </div>
           <div className="metric">
@@ -106,13 +110,20 @@ export const CalculatorInputs = ({
         {metrics.unitMargin <= 0 ? <p className="hint">{t.empty.noBev}</p> : null}
 
         <div className="actions-row">
-          <button type="button" className="btn btn-primary" onClick={onSetBaseline}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={onSetBaseline}
+            disabled={isUnchanged}
+            title={isUnchanged ? t.actions.setBaselineHint : undefined}
+          >
             {t.actions.setBaseline}
           </button>
           <button type="button" className="btn" onClick={onReset}>
             {t.actions.resetToProduct}
           </button>
         </div>
+        <p className="hint">{t.actions.setBaselineHint}</p>
       </div>
     </section>
   );

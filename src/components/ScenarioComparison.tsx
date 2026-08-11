@@ -1,9 +1,12 @@
 import { useMemo, useState } from 'react';
 import type { Dictionary } from '../i18n';
+import type { CalculatorState } from '../hooks/useMarketingCalculator';
 import type { ScenarioMetrics } from '../utilities/marketingMath';
 
 interface ScenarioComparisonProps {
   t: Dictionary;
+  baseline: CalculatorState;
+  current: CalculatorState;
   baselineMetrics: ScenarioMetrics;
   currentMetrics: ScenarioMetrics;
   allowableVolumeDecline: number | null;
@@ -20,14 +23,24 @@ interface CompareRow {
   higherIsBetter?: boolean;
 }
 
+const inputsMatch = (a: CalculatorState, b: CalculatorState) =>
+  a.fixedCosts === b.fixedCosts &&
+  a.variableCost === b.variableCost &&
+  a.sellingPrice === b.sellingPrice &&
+  a.marketSize === b.marketSize;
+
 export const ScenarioComparison = ({
   t,
+  baseline,
+  current,
   baselineMetrics,
   currentMetrics,
   allowableVolumeDecline,
   profitAt,
   formatNumber,
 }: ScenarioComparisonProps) => {
+  const isUnchanged = inputsMatch(baseline, current);
+
   const suggestedVolume = Math.max(
     baselineMetrics.breakEven || 0,
     currentMetrics.breakEven || 0,
@@ -111,6 +124,9 @@ export const ScenarioComparison = ({
     return formatNumber(value);
   };
 
+  const formatMoney = (n: number) =>
+    formatNumber(n, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
   const maxAbs = Math.max(
     ...rows.flatMap((r) => [Math.abs(r.baseline), Math.abs(r.current)]),
     1,
@@ -131,85 +147,124 @@ export const ScenarioComparison = ({
           {t.comparison.intro}
         </p>
 
-        <div className="field" style={{ maxWidth: 280, marginBottom: '1rem' }}>
-          <label htmlFor="compareVolume">{t.labels.compareVolume}</label>
-          <input
-            id="compareVolume"
-            type="number"
-            min={0}
-            value={compareVolume}
-            onChange={(e) => setVolumeOverride(Math.max(0, Number(e.target.value) || 0))}
-          />
-        </div>
-
-        <table className="compare-table">
-          <thead>
-            <tr>
-              <th scope="col" />
-              <th scope="col">{t.labels.baseline}</th>
-              <th scope="col">{t.labels.current}</th>
-              <th scope="col">{t.labels.delta}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => {
-              const delta = row.current - row.baseline;
-              const good =
-                row.higherIsBetter == null
-                  ? null
-                  : row.higherIsBetter
-                    ? delta > 0
-                    : delta < 0;
-              return (
-                <tr key={row.key}>
-                  <td>{row.label}</td>
-                  <td>{formatValue(row.baseline, row.format)}</td>
-                  <td>{formatValue(row.current, row.format)}</td>
-                  <td className={good === true ? 'positive' : good === false && delta !== 0 ? 'negative' : undefined}>
-                    {delta > 0 ? '+' : ''}
-                    {formatValue(delta, row.format)}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-
-        <div className="bar-chart" aria-hidden="true">
-          {rows.slice(0, 4).map((row) => (
-            <div key={row.key} className="bar-row">
-              <div className="bar-label">{row.label}</div>
-              <div className="dual-bars">
-                <div className="bar-track">
-                  <div
-                    className="bar-fill baseline"
-                    style={{ width: `${(Math.abs(row.baseline) / maxAbs) * 100}%` }}
-                  >
-                    {t.labels.baseline}
-                  </div>
-                </div>
-                <div className="bar-track">
-                  <div
-                    className="bar-fill current"
-                    style={{ width: `${(Math.abs(row.current) / maxAbs) * 100}%` }}
-                  >
-                    {t.labels.current}
-                  </div>
-                </div>
-              </div>
+        <div className="baseline-strip" aria-label={t.labels.baselineLocked}>
+          <p className="baseline-strip-title">{t.labels.baselineLocked}</p>
+          <dl className="baseline-strip-grid">
+            <div>
+              <dt>{t.labels.fixed}</dt>
+              <dd>{formatMoney(baseline.fixedCosts)}</dd>
             </div>
-          ))}
+            <div>
+              <dt>{t.labels.var}</dt>
+              <dd>{formatMoney(baseline.variableCost)}</dd>
+            </div>
+            <div>
+              <dt>{t.labels.price}</dt>
+              <dd>{formatMoney(baseline.sellingPrice)}</dd>
+            </div>
+            <div>
+              <dt>{t.labels.marketSize}</dt>
+              <dd>{formatNumber(baseline.marketSize)}</dd>
+            </div>
+          </dl>
         </div>
 
-        {declinePct ? (
-          <div className="callout">
-            <strong>{t.labels.allowableDecline}: {declinePct}%</strong>
-            <p style={{ margin: '0.35rem 0 0' }}>
-              {t.comparison.declineCallout.replace('{pct}', `${declinePct}%`)}
-            </p>
-          </div>
-        ) : currentMetrics.unitMargin > baselineMetrics.unitMargin ? null : (
-          <div className="callout muted">{t.comparison.needHigherMargin}</div>
+        {isUnchanged ? (
+          <div className="callout comparison-empty">{t.comparison.emptyState}</div>
+        ) : (
+          <>
+            <div className="field" style={{ maxWidth: 280, marginBottom: '0.35rem' }}>
+              <label htmlFor="compareVolume">{t.labels.compareVolume}</label>
+              <input
+                id="compareVolume"
+                type="number"
+                min={0}
+                value={compareVolume}
+                onChange={(e) => setVolumeOverride(Math.max(0, Number(e.target.value) || 0))}
+              />
+            </div>
+            <p className="hint compare-volume-hint">{t.comparison.compareVolumeHint}</p>
+
+            <table className="compare-table">
+              <thead>
+                <tr>
+                  <th scope="col" />
+                  <th scope="col">{t.labels.baseline}</th>
+                  <th scope="col">{t.labels.current}</th>
+                  <th scope="col">{t.labels.delta}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => {
+                  const delta = row.current - row.baseline;
+                  const good =
+                    row.higherIsBetter == null
+                      ? null
+                      : row.higherIsBetter
+                        ? delta > 0
+                        : delta < 0;
+                  return (
+                    <tr key={row.key}>
+                      <td>{row.label}</td>
+                      <td>{formatValue(row.baseline, row.format)}</td>
+                      <td>{formatValue(row.current, row.format)}</td>
+                      <td
+                        className={
+                          good === true
+                            ? 'positive'
+                            : good === false && delta !== 0
+                              ? 'negative'
+                              : undefined
+                        }
+                      >
+                        {delta > 0 ? '+' : ''}
+                        {formatValue(delta, row.format)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <div className="bar-chart" aria-hidden="true">
+              {rows.slice(0, 4).map((row) => (
+                <div key={row.key} className="bar-row">
+                  <div className="bar-label">{row.label}</div>
+                  <div className="dual-bars">
+                    <div className="bar-track">
+                      <div
+                        className="bar-fill baseline"
+                        style={{ width: `${(Math.abs(row.baseline) / maxAbs) * 100}%` }}
+                      >
+                        {t.labels.baseline}
+                      </div>
+                    </div>
+                    <div className="bar-track">
+                      <div
+                        className="bar-fill current"
+                        style={{ width: `${(Math.abs(row.current) / maxAbs) * 100}%` }}
+                      >
+                        {t.labels.current}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {declinePct ? (
+              <div className="callout">
+                <strong>
+                  {t.labels.allowableDecline}: {declinePct}%
+                </strong>
+                <p style={{ margin: '0.35rem 0 0' }}>
+                  {t.comparison.declineCallout.replace('{pct}', `${declinePct}%`)}
+                </p>
+              </div>
+            ) : currentMetrics.unitMargin > baselineMetrics.unitMargin ? null : (
+              <div className="callout muted">{t.comparison.needHigherMargin}</div>
+            )}
+          </>
         )}
       </div>
     </section>

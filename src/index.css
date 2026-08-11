@@ -515,6 +515,62 @@ button {
   gap: 0.25rem;
 }
 
+.baseline-strip {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px dashed var(--border);
+  background: color-mix(in srgb, var(--surface-solid) 80%, transparent);
+}
+
+.baseline-strip-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.baseline-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.baseline-strip-grid dt {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.baseline-strip-grid dd {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.comparison-empty {
+  margin-top: 0.25rem;
+}
+
+.compare-volume-hint {
+  margin: 0 0 1rem;
+  max-width: 40rem;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:disabled:hover {
+  transform: none;
+  border-color: var(--border);
+}
+
 .create-form {
   display: grid;
   gap: 0.85rem;

@@ -67,10 +67,11 @@ export const dictionary = {
       totalCost: 'Total cost',
       profit: 'Profit',
       baseline: 'Baseline',
-      current: 'Current',
+      current: 'What-if',
       delta: 'Change',
       allowableDecline: 'Allowable volume decline',
-      compareVolume: 'Compare at volume',
+      compareVolume: 'Compare profit at volume',
+      baselineLocked: 'Locked baseline inputs',
     },
     product: {
       select: 'Active product',
@@ -84,7 +85,9 @@ export const dictionary = {
       custom: 'Custom',
     },
     actions: {
-      setBaseline: 'Set as baseline',
+      setBaseline: 'Lock current as baseline',
+      setBaselineHint:
+        'Change simulator inputs to compare against the locked baseline. Lock when this what-if should become your new reference (Change resets to zero).',
       resetToProduct: 'Reset to product defaults',
       apply: 'Apply',
     },
@@ -96,7 +99,12 @@ export const dictionary = {
       dollars: 'Dollars',
     },
     comparison: {
-      intro: 'Compare your baseline scenario with the current what-if inputs.',
+      intro:
+        'Baseline is a locked snapshot. What-if is whatever you set in the simulator. Edit price or costs above to create a difference—locking the baseline does not create one.',
+      emptyState:
+        'Baseline and what-if match right now. Change fixed costs, variable cost, selling price, or market size in the simulator to see deltas here.',
+      compareVolumeHint:
+        'This volume only recalculates the profit row under each scenario. Margin and break-even come from price and costs, not from this field.',
       noChange: 'Margins are equal or lower—there is no extra volume cushion from a margin gain.',
       declineCallout:
         'With the higher unit margin, volume can fall by up to {pct} and still deliver the same total contribution as the baseline.',
@@ -172,10 +180,11 @@ export const dictionary = {
       totalCost: 'Costo total',
       profit: 'Utilidad',
       baseline: 'Línea base',
-      current: 'Actual',
+      current: 'Simulación',
       delta: 'Cambio',
       allowableDecline: 'Caída de volumen admisible',
-      compareVolume: 'Comparar en volumen',
+      compareVolume: 'Comparar utilidad en volumen',
+      baselineLocked: 'Insumos de línea base (bloqueados)',
     },
     product: {
       select: 'Producto activo',
@@ -189,7 +198,9 @@ export const dictionary = {
       custom: 'Personalizado',
     },
     actions: {
-      setBaseline: 'Establecer como línea base',
+      setBaseline: 'Fijar actual como línea base',
+      setBaselineHint:
+        'Cambia los insumos del simulador para comparar contra la línea base bloqueada. Fíjala cuando esta simulación deba ser tu nueva referencia (el Cambio vuelve a cero).',
       resetToProduct: 'Restablecer valores del producto',
       apply: 'Aplicar',
     },
@@ -201,7 +212,12 @@ export const dictionary = {
       dollars: 'Dólares',
     },
     comparison: {
-      intro: 'Compara tu escenario base con los insumos actuales de simulación.',
+      intro:
+        'La línea base es una instantánea bloqueada. La simulación es lo que configures en el simulador. Edita precio o costos arriba para crear una diferencia: fijar la línea base no la crea.',
+      emptyState:
+        'La línea base y la simulación coinciden ahora. Cambia costos fijos, costo variable, precio de venta o tamaño de mercado en el simulador para ver diferencias aquí.',
+      compareVolumeHint:
+        'Este volumen solo recalcula la fila de utilidad en cada escenario. El margen y el equilibrio dependen del precio y los costos, no de este campo.',
       noChange: 'Los márgenes son iguales o menores: no hay colchón extra de volumen por una ganancia de margen.',
       declineCallout:
         'Con el margen unitario más alto, el volumen puede caer hasta {pct} y aun así entregar la misma contribución total que la línea base.',
